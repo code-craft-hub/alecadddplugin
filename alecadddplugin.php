@@ -17,7 +17,18 @@
 
  defined('ABSPATH') or die();
 
- if( !class_exists( 'AlecadddPlugin' ) ) 
+
+ if ( file_exists(dirname( __FILE__ ) . '/vendor/autoload.php' ) )
+ {
+    require_once dirname( __FILE__ ) . '/vendor/autoload.php';
+ }
+
+
+ use Inc\Activate;
+ use Inc\Deactivate;
+
+
+ if ( !class_exists( 'AlecadddPlugin' ) ) 
  {
     class AlecadddPlugin
     {
@@ -49,14 +60,19 @@
             add_menu_page( 'Alecaddd Plugin', 'Work Hard', 'manage_options', 'alecaddd_plugin', array($this, 'admin_index'), 'dashicons-store', 110 );
         }
 
-        protected function create_post_type()
+        public function admin_index()
+        {
+            require_once plugin_dir_path( __FILE__ ) . '/templates/admin.php';
+        }
+
+        function create_post_type()
         {
             add_action( 'init', array($this, 'custom_post_type' ) );
         }
 
         function custom_post_type() 
         {
-            register_post_type( 'book', [ 'public' => true, 'label' => 'Books' ] );
+            register_post_type( 'book', [ 'label' => 'Books', 'public' => true ] );
         }
 
         function enqueue()
@@ -68,16 +84,18 @@
 
         function activate() 
         {
-            require_once plugin_dir_path( __FILE__ ) . 'inc/Activate.php';
             Activate::activate();
+        }
+        function deactivate() 
+        {
+            Deactivate::deactivate();
         }
     }
  }
 
  $alecadddPlugin = new AlecadddPlugin();
  $alecadddPlugin->register();
+ $alecadddPlugin->create_post_type();
 
-register_activation_hook( __FILE__, array( $alecadddPlugin, 'activate' ) );
-
-require_once plugin_dir_path( __FILE__ ) . 'inc/Deactivate.php'
-register_deactivation_hook( __FILE__, array( 'Deactivate', 'deactivate' ) );
+ register_activation_hook( __FILE__, array( $alecadddPlugin, 'activate' ) );
+ register_deactivation_hook( __FILE__, array( $alecadddPlugin, 'deactivate' ) );
