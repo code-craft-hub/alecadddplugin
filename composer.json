@@ -1,0 +1,17 @@
+{
+    "name": "kachi/alecadddplugin",
+    "description": "project",
+    "type": "project",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "Kachi",
+            "email": "onlinehassle1234@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {"Inc\\" : "./inc"}
+    }
+}
