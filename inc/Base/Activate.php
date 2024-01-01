@@ -4,7 +4,7 @@
  * @package CodeCraftHub
 */
 
-namespace Inc;
+namespace Inc\Base;
 
 class Activate
 {
