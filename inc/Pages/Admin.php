@@ -6,19 +6,41 @@
 
 namespace Inc\Pages;
 
-use \Inc\Base\BaseController;
 use \Inc\Api\SettingsApi;
+use \Inc\Base\BaseController;
+use \Inc\Api\Callbacks\AdminCallbacks;
 
 class Admin extends BaseController
 {
     public $settings;
 
-    public $pages = array();
-    public $subpages = array();
+    public $callbacks;
 
-    public function __construct()
+    public $pages = array();
+
+    public $subpages = array();
+    
+    public function register()
     {
         $this->settings = new SettingsApi();
+
+        $this->callbacks = new AdminCallbacks();
+
+        $this->setPages();
+        
+        $this->setSubPages();
+
+        $this->setSettings();
+
+        $this->setSections();
+
+        $this->setFields();
+
+        $this->settings->addPages( $this->pages )->withSubPage( 'Dashboard' )->addSubPages( $this->subpages)->register();
+    }
+
+    public function setPages() 
+    {
 
         $this->pages = array(
             array(
@@ -26,11 +48,14 @@ class Admin extends BaseController
                 'menu_title' => 'Work Hard',
                 'capability' => 'manage_options' ,
                 'menu_slug' =>  'alecaddd_plugin',
-                'callback' => function() { echo '<h1>Code Craft Hub Plugin</h1>';},
+                'callback' => array( $this->callbacks, 'adminDashboard' ),
                 'icon_url' => 'dashicons-superhero',
                 'position' => 110 
             )
         );
+    }
+    public function setSubPages() 
+    {
 
         $this->subpages = array(
             array(
@@ -47,7 +72,9 @@ class Admin extends BaseController
                 'menu_title' => 'Houses',
                 'capability' => 'manage_options' ,
                 'menu_slug' =>  'Houses',
-                'callback' => function() { echo '<h1>Houses Benz</h1>';},
+                'callback' => function() { 
+                    return require_once("$this->plugin_path/templates/admin.php");
+                },
             ),
             array(
                 'parent_slug' => 'alecaddd_plugin',
@@ -58,13 +85,67 @@ class Admin extends BaseController
                 'callback' => function() { echo '<h1>Wealth Benz</h1>';},
             ),
         );
-
     }
-    
-    public function register()
+
+    public function setSettings()
     {
+        $args = array(
+            array(
+                'option_group' => 'workhard_group',
+                'option_name'  => 'text_example',
+                // 'callback'     => array( $this->callbacks, 'alecadddOptionGroup')
+            )
+        );
+
+        $this->settings->setSettings( $args );
+    }
+
+
+    public function setSections()
+    {
+        $args = array(
+            array(
+                'id'         => 'alecaddd_admin_index',
+                'title'      => 'Login Form',
+                // 'callback'   => array( $this->callbacks, 'alecadddAdminSection'),
+                'page'       => 'alecaddd_plugin'
+            )
+        );
         
-        $this->settings->addPages( $this->pages )->withSubPage( 'Dashboard' )->addSubPages( $this->subpages)->register();
+        $this->settings->setSections( $args );
+    }
+
+
+    public function setFields()
+    {
+        $args = array(
+            array(
+                'id'         => 'text_example',
+                'title'      => 'Username : ',
+                'callback'   => array( $this->callbacks, 'alecadddTextExample'),
+                'page'       => 'alecaddd_plugin',
+                'section'    => 'alecaddd_admin_index',
+                'args'       => array( 'label_for' => 'text_example', 'class' => 'example-class' )
+            ),
+            array(
+                'id'         => 'fullname',
+                'title'      => 'FullName : ',
+                'callback'   => array( $this->callbacks, 'alecadddFirstName'),
+                'page'       => 'alecaddd_plugin',
+                'section'    => 'alecaddd_admin_index',
+                'args'       => array( 'label_for' => 'text_example', 'class' => 'example-class' )
+            ),
+            array(
+                'id'         => 'password',
+                'title'      => 'Password : ',
+                'callback'   => array( $this->callbacks, 'alecadddSecondName'),
+                'page'       => 'alecaddd_plugin',
+                'section'    => 'alecaddd_admin_index',
+                'args'       => array( 'label_for' => 'text_example', 'class' => 'example-class' )
+            ),
+        );
+
+        $this->settings->setFields( $args );
     }
 
 }
