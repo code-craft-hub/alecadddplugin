@@ -91,10 +91,18 @@ class Admin extends BaseController
     {
         $args = array(
             array(
-                'option_group' => 'workhard_group',
+                'option_group' => 'alecaddd_options_group',
                 'option_name'  => 'text_example',
-                // 'callback'     => array( $this->callbacks, 'alecadddOptionGroup')
-            )
+                'callback'     => array( $this->callbacks, 'alecadddOptionsGroup')
+            ),
+            array(
+                'option_group' => 'alecaddd_options_group',
+                'option_name'  => 'firstName',
+            ),
+            array(
+                'option_group' => 'alecaddd_options_group',
+                'option_name'  => 'secondName',
+            ),
         );
 
         $this->settings->setSettings( $args );
@@ -106,8 +114,8 @@ class Admin extends BaseController
         $args = array(
             array(
                 'id'         => 'alecaddd_admin_index',
-                'title'      => 'Login Form',
-                // 'callback'   => array( $this->callbacks, 'alecadddAdminSection'),
+                'title'      => 'Settings',
+                'callback'   => array( $this->callbacks, 'alecadddAdminSection'),
                 'page'       => 'alecaddd_plugin'
             )
         );
@@ -128,20 +136,20 @@ class Admin extends BaseController
                 'args'       => array( 'label_for' => 'text_example', 'class' => 'example-class' )
             ),
             array(
-                'id'         => 'fullname',
+                'id'         => 'firstName',
                 'title'      => 'FullName : ',
                 'callback'   => array( $this->callbacks, 'alecadddFirstName'),
                 'page'       => 'alecaddd_plugin',
                 'section'    => 'alecaddd_admin_index',
-                'args'       => array( 'label_for' => 'text_example', 'class' => 'example-class' )
+                'args'       => array( 'label_for' => 'firstName', 'class' => 'example-class' )
             ),
             array(
-                'id'         => 'password',
+                'id'         => 'secondName',
                 'title'      => 'Password : ',
                 'callback'   => array( $this->callbacks, 'alecadddSecondName'),
                 'page'       => 'alecaddd_plugin',
                 'section'    => 'alecaddd_admin_index',
-                'args'       => array( 'label_for' => 'text_example', 'class' => 'example-class' )
+                'args'       => array( 'label_for' => 'secondName', 'class' => 'example-class' )
             ),
         );
 
