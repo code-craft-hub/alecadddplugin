@@ -9,6 +9,7 @@ namespace Inc\Pages;
 use \Inc\Api\SettingsApi;
 use \Inc\Base\BaseController;
 use \Inc\Api\Callbacks\AdminCallbacks;
+use \Inc\Api\Callbacks\ManagerCallbacks;
 
 class Admin extends BaseController
 {
@@ -16,6 +17,8 @@ class Admin extends BaseController
 
     public $callbacks;
 
+    public $callbacks_mngr;
+    
     public $pages = array();
 
     public $subpages = array();
@@ -25,6 +28,8 @@ class Admin extends BaseController
         $this->settings = new SettingsApi();
 
         $this->callbacks = new AdminCallbacks();
+
+        $this->callbacks_mngr = new ManagerCallbacks();
 
         $this->setPages();
         
@@ -91,18 +96,51 @@ class Admin extends BaseController
     {
         $args = array(
             array(
-                'option_group' => 'alecaddd_options_group',
-                'option_name'  => 'text_example',
-                'callback'     => array( $this->callbacks, 'alecadddOptionsGroup')
+                'option_group' => 'alecaddd_plugin_settings',
+                'option_name'  => 'cpt_manager',
+                'callback'     => array( $this->callbacks_mngr, 'checkboxSanitze')
             ),
-            array(
-                'option_group' => 'alecaddd_options_group',
-                'option_name'  => 'firstName',
-            ),
-            array(
-                'option_group' => 'alecaddd_options_group',
-                'option_name'  => 'secondName',
-            ),
+            // array(
+            //     'option_group' => 'alecaddd_plugin_settings',
+            //     'option_name'  => 'taxonomy_manager',
+            //     'callback'     => array( $this->callbacks_mngr, 'checkboxSanitze')
+            // ),
+            // array(
+            //     'option_group' => 'alecaddd_plugin_settings',
+            //     'option_name'  => 'media_widget',
+            //     'callback'     => array( $this->callbacks_mngr, 'checkboxSanitze')
+            // ),
+            // array(
+            //     'option_group' => 'alecaddd_plugin_settings',
+            //     'option_name'  => 'gallery_manager',
+            //     'callback'     => array( $this->callbacks_mngr, 'checkboxSanitze')
+            // ),
+            // array(
+            //     'option_group' => 'alecaddd_plugin_settings',
+            //     'option_name'  => 'testimonial_manager',
+            //     'callback'     => array( $this->callbacks_mngr, 'checkboxSanitze')
+            // ),
+            // array(
+            //     'option_group' => 'alecaddd_plugin_settings',
+            //     'option_name'  => 'templates_manager',
+            //     'callback'     => array( $this->callbacks_mngr, 'checkboxSanitze')
+            // ),
+            // array(
+            //     'option_group' => 'alecaddd_plugin_settings',
+            //     'option_name'  => 'login_manager',
+            //     'callback'     => array( $this->callbacks_mngr, 'checkboxSanitze')
+            // ),
+            // array(
+            //     'option_group' => 'alecaddd_plugin_settings',
+            //     'option_name'  => 'membership_manager',
+            //     'callback'     => array( $this->callbacks_mngr, 'checkboxSanitze')
+            // ),
+            // array(
+            //     'option_group' => 'alecaddd_plugin_settings',
+            //     'option_name'  => 'chat_manager',
+            //     'callback'     => array( $this->callbacks_mngr, 'checkboxSanitze')
+            // ),
+           
         );
 
         $this->settings->setSettings( $args );
@@ -114,8 +152,8 @@ class Admin extends BaseController
         $args = array(
             array(
                 'id'         => 'alecaddd_admin_index',
-                'title'      => 'Settings',
-                'callback'   => array( $this->callbacks, 'alecadddAdminSection'),
+                'title'      => 'Settings Manager',
+                'callback'   => array( $this->callbacks_mngr, 'adminSectionManager'),
                 'page'       => 'alecaddd_plugin'
             )
         );
@@ -128,28 +166,12 @@ class Admin extends BaseController
     {
         $args = array(
             array(
-                'id'         => 'text_example',
-                'title'      => 'Username : ',
-                'callback'   => array( $this->callbacks, 'alecadddTextExample'),
+                'id'         => 'cpt_manager',
+                'title'      => 'Activate CPT Manager',
+                'callback'   => array( $this->callbacks_mngr, 'checkboxField'),
                 'page'       => 'alecaddd_plugin',
                 'section'    => 'alecaddd_admin_index',
-                'args'       => array( 'label_for' => 'text_example', 'class' => 'example-class' )
-            ),
-            array(
-                'id'         => 'firstName',
-                'title'      => 'FullName : ',
-                'callback'   => array( $this->callbacks, 'alecadddFirstName'),
-                'page'       => 'alecaddd_plugin',
-                'section'    => 'alecaddd_admin_index',
-                'args'       => array( 'label_for' => 'firstName', 'class' => 'example-class' )
-            ),
-            array(
-                'id'         => 'secondName',
-                'title'      => 'Password : ',
-                'callback'   => array( $this->callbacks, 'alecadddSecondName'),
-                'page'       => 'alecaddd_plugin',
-                'section'    => 'alecaddd_admin_index',
-                'args'       => array( 'label_for' => 'secondName', 'class' => 'example-class' )
+                'args'       => array( 'label_for' => 'cpt_manager', 'class' => 'ui-toggle' )
             ),
         );
 
